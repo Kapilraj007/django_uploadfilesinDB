@@ -1,0 +1,59 @@
+{% extends "index.html" %}
+{% block content %}
+
+<div class="container-fluid" style="margin-top: 50px;margin-bottom: 100px;">
+  {% if messages %}
+  {% for message in messages %}
+     {% if message.tags == 'error' %}
+       <div class="alert alert-danger">
+         {{message}}
+       </div>
+     {% else %}
+     <div class="alert alert-{{message.tags}}">
+       {{message}}
+     </div>
+     {% endif %}
+   {% endfor %}
+{% endif %}
+  <div class="col-md-offset-1 col-md-4">
+    <h3 class="page-header text-success text-center">Upload Files</h3>
+      <form action= "/myuploadfile" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>FileName</label>
+          {{form.file_name}}
+        </div>
+        <div class="form-group">
+          <label>File</label>
+          {{form.file}}
+        </div>
+        <button type="submit" class="btn btn-info pull-right">submit</button> 
+      </form>
+  </div>
+  <div class="col-md-6">
+    {% if mydata %}
+    <h3 class="page-header text-info text-center">View files</h3>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>S.no</th>
+          <th>FileName</th>
+          <th>File</th>
+          <th>Delete</th>
+         
+      </thead>
+      {% for data in mydata %}
+      <tbody>
+        <tr>
+          <td style="text-align: center;">{{forloop.counter}}</td>
+          <td>{{data.file_name}}</td>
+          <td><a href="{{data.file.url}}">{{data.file}}</a></td>
+          <td style="text-align: center; margin-top: 3px;" class="btn btn-danger"><a href="deletefile/{{data.id}}" style="text-decoration: none; color: wheat;">Delete</a></td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </div>
+ </div>
+{% endblock %}
